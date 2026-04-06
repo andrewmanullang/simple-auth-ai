@@ -1,0 +1,24 @@
+{
+  "name": "simple-auth-ai",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.49",
+    "drizzle-orm": "latest",
+    "elysia": "latest",
+    "postgres": "latest"
+  },
+  "devDependencies": {
+    "@esbuild/darwin-arm64": "^0.25.4",
+    "bun-types": "latest",
+    "drizzle-kit": "latest",
+    "esbuild": "^0.25.4",
+    "typescript": "latest"
+  }
+}
