@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@sinclair/typebox": "^0.34.49",
+    "@types/bcrypt": "^6.0.0",
+    "bcrypt": "^6.0.0",
     "drizzle-orm": "latest",
     "elysia": "latest",
     "postgres": "latest"
