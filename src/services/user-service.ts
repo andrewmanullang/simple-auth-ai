@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
 import { db } from '../db';
-import { users } from '../db/schema';
+import { users, sessions } from '../db/schema';
 
 export const registerUser = async ({ name, email, password }: any) => {
   // 1. Check if user already exists
@@ -26,4 +26,38 @@ export const registerUser = async ({ name, email, password }: any) => {
   });
 
   return { data: 'OK' };
+};
+
+export const loginUser = async ({ email, password }: any) => {
+  // 1. Find user by email
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  if (!user) {
+    return { error: 'email or password is incorrect' };
+  }
+
+  // 2. Verify password
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return { error: 'email or password is incorrect' };
+  }
+
+  // 3. Generate token and upsert session
+  const token = crypto.randomUUID();
+  await db
+    .insert(sessions)
+    .values({
+      token,
+      userId: user.id,
+    })
+    .onConflictDoUpdate({
+      target: sessions.userId,
+      set: { token },
+    });
+
+  return { data: token };
 };
