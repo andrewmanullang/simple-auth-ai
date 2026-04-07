@@ -84,6 +84,11 @@ export const getCurrentUser = async (token: string) => {
 };
 
 export const logoutUser = async (token: string) => {
-  await db.delete(sessions).where(eq(sessions.token, token));
-  return { data: 'OK' };
+  try {
+    await db.delete(sessions).where(eq(sessions.token, token));
+    return { data: 'OK' };
+  } catch (error) {
+    console.error('Logout error:', error);
+    return { error: 'Internal Server Error' };
+  }
 };

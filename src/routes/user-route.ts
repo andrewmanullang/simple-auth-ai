@@ -33,14 +33,19 @@ export const userRoutes = new Elysia({ prefix: '/api' })
       password: t.String()
     })
   })
-  .get('/users/current', async ({ headers, set }) => {
+  .derive(({ headers }) => {
     const auth = headers['authorization'];
-    if (!auth || !auth.startsWith('Bearer ')) {
+    if (auth && auth.startsWith('Bearer ')) {
+      return { token: auth.replace('Bearer ', '') };
+    }
+    return { token: null };
+  })
+  .get('/users/current', async ({ token, set }) => {
+    if (!token) {
       set.status = 401;
       return { error: 'Unauthorized' };
     }
 
-    const token = auth.replace('Bearer ', '');
     const result = await getCurrentUser(token);
 
     if (result.error) {
@@ -50,15 +55,13 @@ export const userRoutes = new Elysia({ prefix: '/api' })
 
     return result.data;
   })
-  .delete('/users/logout', async ({ headers, set }) => {
-    const auth = headers['authorization'];
-    if (!auth || !auth.startsWith('Bearer ')) {
+  .delete('/users/logout', async ({ token, set }) => {
+    if (!token) {
       set.status = 401;
       return { error: 'Unauthorized' };
     }
 
-    const token = auth.replace('Bearer ', '');
-    const result = await logoutUser(token);
-
-    return result;
+    await logoutUser(token);
+    set.status = 204;
+    return;
   });
