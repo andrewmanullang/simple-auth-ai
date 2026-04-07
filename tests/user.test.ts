@@ -59,6 +59,38 @@ describe('User Authentication', () => {
 
       expect(response.status).toBe(422);
     });
+
+    it('rejects registration with an invalid email format', async () => {
+      const response = await app.handle(
+        new Request('http://localhost/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: 'Test',
+            email: 'not-an-email',
+            password: testPassword,
+          }),
+        })
+      );
+
+      expect(response.status).toBe(422);
+    });
+
+    it('rejects registration with empty fields', async () => {
+      const response = await app.handle(
+        new Request('http://localhost/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: '',
+            email: '',
+            password: '',
+          }),
+        })
+      );
+
+      expect(response.status).toBe(422);
+    });
   });
 
   describe('Login', () => {
@@ -95,6 +127,21 @@ describe('User Authentication', () => {
       expect(response.status).toBe(400);
       const result = await response.json() as any;
       expect(result.error).toBeDefined();
+    });
+
+    it('rejects login with an invalid email format', async () => {
+      const response = await app.handle(
+        new Request('http://localhost/api/users/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: 'invalid-email',
+            password: testPassword,
+          }),
+        })
+      );
+
+      expect(response.status).toBe(422);
     });
   });
 
