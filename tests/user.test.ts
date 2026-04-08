@@ -57,7 +57,7 @@ describe('User Authentication', () => {
         })
       );
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
     });
 
     it('rejects registration with an invalid email format', async () => {
@@ -73,7 +73,7 @@ describe('User Authentication', () => {
         })
       );
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
     });
 
     it('rejects registration with empty fields', async () => {
@@ -89,7 +89,7 @@ describe('User Authentication', () => {
         })
       );
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
     });
   });
 
@@ -141,7 +141,7 @@ describe('User Authentication', () => {
         })
       );
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
     });
   });
 
