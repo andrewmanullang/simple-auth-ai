@@ -12,7 +12,16 @@ export const app = new Elysia()
       },
       tags: [
         { name: 'Auth', description: 'Authentication endpoints' }
-      ]
+      ],
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+          }
+        }
+      }
     }
   }))
   .get('/', () => 'Hello, simple-auth-ai is running!')
