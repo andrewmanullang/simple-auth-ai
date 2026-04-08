@@ -1,0 +1,32 @@
+@baseUrl = http://localhost:3000
+@token = 2cd91cac-8db0-445c-9886-a7b985131408
+
+### Health check
+GET {{baseUrl}}/
+
+### Register user
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "name": "andrew",
+  "email": "andrew@gmail.com",
+  "password": "secret"
+}
+
+### Login user
+POST {{baseUrl}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "andrew@gmail.com",
+  "password": "secret"
+}
+
+### Get current user (requires token)
+GET {{baseUrl}}/api/users/current
+Authorization: Bearer {{token}}
+
+### Logout user (requires token)
+DELETE {{baseUrl}}/api/users/logout
+Authorization: Bearer {{token}}
