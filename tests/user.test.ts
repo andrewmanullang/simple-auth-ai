@@ -57,7 +57,7 @@ describe('User Authentication', () => {
         })
       );
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
     });
 
     it('rejects registration with an invalid email format', async () => {
@@ -73,7 +73,10 @@ describe('User Authentication', () => {
         })
       );
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
+      const result = await response.json() as any;
+      expect(result.error).toBe('Validation failed');
+      expect(result.fields.email).toBe('Email must be a valid email address');
     });
 
     it('rejects registration with empty fields', async () => {
@@ -89,7 +92,12 @@ describe('User Authentication', () => {
         })
       );
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
+      const result = await response.json() as any;
+      expect(result.error).toBe('Validation failed');
+      expect(result.fields.name).toBe('Name is required');
+      expect(result.fields.email).toBe('Email is required');
+      expect(result.fields.password).toBe('Password is required');
     });
   });
 
@@ -141,7 +149,10 @@ describe('User Authentication', () => {
         })
       );
 
-      expect(response.status).toBe(422);
+      expect(response.status).toBe(400);
+      const result = await response.json() as any;
+      expect(result.error).toBe('Validation failed');
+      expect(result.fields.email).toBe('Email must be a valid email address');
     });
   });
 
